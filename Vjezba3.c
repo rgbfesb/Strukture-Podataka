@@ -6,9 +6,7 @@
 
 #define N (1000)
 
-
 typedef struct lista *Pozicija;
-
 
 struct lista {
 	char ime[N];
@@ -18,233 +16,135 @@ struct lista {
 	Pozicija Next;
 };
 
-int DodajNaPocetak(int, Pozicija);
+int Unos(Pozicija);
+int DodajNaPocetak(Pozicija);
+int DodajNaKraj(Pozicija);
 int IspisListe(Pozicija);
-int DodajNaKraj(int, Pozicija);
-int TraziPrezime(char*, Pozicija);
-Pozicija TraziElement(int, Pozicija);
-int BrisiElement(int, Pozicija);
-int UbaciIzaElementa(int, int, Pozicija);
-int UbaciIspredElementa(int, int, Pozicija);
-int Unos(Pozicija, int);
 int SortirajListu(Pozicija);
+int UbaciIzaElementa(Pozicija);
+int UbaciIspredElementa(Pozicija);
+int BrisiElement(Pozicija);
+int BrisiSve(Pozicija);
+int TraziPrezime(Pozicija);
+Pozicija TraziElement(int, Pozicija);
 int UpisUDatoteku(const char*, Pozicija);
 int IspisIzDatoteke(const char *, Pozicija);
-int BrisiSve(Pozicija);
 
 
 int main(void)
 {
-
-	int i = 5, provjera = 0, n = 0, z = 0;
-	char a[N];
-	const char* b = "datoteka.txt";
+	const char* ime_file = "datoteka.txt";
 	Pozicija Head;
 
-
 	Head = (Pozicija)malloc(sizeof(Pozicija));
-
 	Head->Next = NULL;
 
+	DodajNaPocetak(Head);		//dodajemo element na pocetak liste
+	DodajNaPocetak(Head);		//dodajemo element na pocetak liste
+	DodajNaPocetak(Head);		//dodajemo element na pocetak liste
+	DodajNaKraj(Head);			//dodajemo element na kraj liste
+	IspisListe(Head);			//ispisujemo listu
+	TraziPrezime(Head);			//trazimo prezime
+	BrisiElement(Head);			//brisemo element iz liste
+	IspisListe(Head);			//ispisujemo listu
+	UbaciIzaElementa(Head);		//ubacujemo iza nekog elementa
+	IspisListe(Head);			//ispisujemo listu
+	UbaciIspredElementa(Head);	//ubacujemo ispred nekog elementa
+	IspisListe(Head);			//ispisujemo listu
+	SortirajListu(Head);		//sortiramo listu po prezimenima
+	IspisListe(Head);			//ispisujemo listu
+	UpisUDatoteku(ime_file, Head);		//upisujemo listu u datoteku
+	IspisIzDatoteke(ime_file, Head);	//ispisujemo listu iz datoteke
 
-	DodajNaPocetak(i, Head);//dodajemo elemente
-	DodajNaPocetak(i + 1, Head);
-	DodajNaPocetak(i - 4, Head);
-	DodajNaKraj(i - 1, Head);
-	IspisListe(Head);//ispisujemo listu
-	printf("Unesite prezime koje trazite\n");
-	scanf("%s", a);
-	provjera = TraziPrezime(a, Head);//trazimo prezime
-	if (provjera > 0)
-		printf("Pronadeno je prezime %s\n", a);
-	else
-		printf("Prezime nije pronadeno\n");
-	printf("Unesite element koji zelite brisati\n");//brisemo element
-	scanf("%d", &n);
-	BrisiElement(n, Head);
-
-	IspisListe(Head);
-
-	UbaciIzaElementa(5, 7, Head);//ubacujemo iza nekog elementa
-	UbaciIspredElementa(5, 9, Head);//ubacujemo poslije nekog elementa
-
-
-	IspisListe(Head);
-	SortirajListu(Head);
-
-	IspisListe(Head);
-	UpisUDatoteku(b, Head);
-	IspisIzDatoteke(b, Head);
-
+	system("pause");
 	return 0;
 
 }
 
-int DodajNaPocetak(int i, Pozicija P)//unos elementa na pocetak
+int Unos(Pozicija temp)			//funkcija koja unosi ime prezime godinu i element
 {
-	Pozicija temp;
-	temp = (Pozicija)malloc(sizeof(Pozicija));
-	if (temp == NULL)
-		printf("nema prostora");
 
-
-	temp->element = i;
-	temp->Next = P->Next;
-	P->Next = temp;
-
-	Unos(temp, i);
-	return 0;
-
-}
-int DodajNaKraj(int i, Pozicija P)//unos elementa na kraj
-{
-	Pozicija temp2;
-	temp2 = (Pozicija)malloc(sizeof(Pozicija));
-	if (temp2 == NULL)
-		printf("nema prostora");
-
-
-
-	Unos(temp2, i);
-
-	while (P->Next != NULL)
-		P = P->Next;
-
-	temp2->Next = P->Next;
-	P->Next = temp2;
-	return 0;
-
-}
-int IspisListe(Pozicija P)//ispis liste
-{
-	if (P->Next == NULL)
-	{
-		printf("Lista je prazna\n");
-		return 0;
-	}
-
-
-	while (P->Next != NULL) {
-
-		printf("%s\t%s\t %d\t %d\n", P->Next->ime, P->Next->prezime, P->Next->godina, P->Next->element);
-		P = P->Next;
-
-	}
-	printf("\n");
-	return 0;
-}
-int TraziPrezime(char *a, Pozicija P)//trazenje prezimena
-{
-	int spremiste = 0;
-	P = P->Next;
-	while (P->Next != NULL)
-	{
-		if (strcmp(a, P->prezime) == 0)
-			spremiste++;
-		P = P->Next;
-	}
-
-	return spremiste;
-}
-int BrisiElement(int i, Pozicija P)//brisanje elementa
-{
-	Pozicija q;
-	q = TraziElement(i, P);
-
-	if (q->Next == NULL)
-	{
-		printf("Nije pronaden navedeni element\n");
-		return 0;
-	}
-	else {
-		P = q->Next;
-		q->Next = P->Next;
-		free(P);
-
-		return 0;
-	}
-}
-int UbaciIzaElementa(int x, int y, Pozicija P)//ubacivanje elementa nakon nekog vec elementa
-{
-	Pozicija q;
-	q = (Pozicija)malloc(sizeof(Pozicija));
-
-	P = TraziElement(x, P);
-	P = P->Next;
-	if (P == NULL) {
-		printf("Greska\n");
-		return 0;
-	}
-	else {
-
-		Unos(q, y);
-		q->Next = P->Next;
-		P->Next = q;
-		return 0;
-	}
-}
-
-Pozicija TraziElement(int x, Pozicija P)//funkcija koja trazi prethodnika
-{
-	while (P->Next != NULL&&P->Next->element != x)
-	{
-		P = P->Next;
-	}
-
-
-	return P;
-}
-
-
-int UbaciIspredElementa(int x, int y, Pozicija P)//za ubacivanje elementa ispred nekog postojeceg
-{
-	Pozicija q;
-	q = (Pozicija)malloc(sizeof(Pozicija));
-	P = TraziElement(x, P);
-
-	if (P->Next == NULL) {
-		printf("Greska\n");
-		return 0;
-	}
-	else {
-
-		Unos(q, y);
-		q->Next = P->Next;
-		P->Next = q;
-
-		return 0;
-	}
-}
-int Unos(Pozicija temp, int i)//funkcija koja unosi imena i ostalo
-{
-	temp->element = i;
 	printf("Unesi ime\n");
 	scanf(" %s", temp->ime);
 	printf("Unesi prezime\n");
 	scanf(" %s", temp->prezime);
 	printf("Unesi godiste\n");
 	scanf("%d", &temp->godina);
+	printf("Unesi element\n");
+	scanf("%d", &temp->element);
 	return 0;
 }
 
-int SortirajListu(Pozicija P)//funkcija koja sortira po prezimenima
+int DodajNaPocetak(Pozicija P)	//unos elementa na pocetak
+{
+	Pozicija temp;
+	temp = (Pozicija)malloc(sizeof(Pozicija));
+	if (NULL == temp) {
+		printf("Nema dovoljno prostora u memoriji\n");
+		return 0;
+	}
+
+	temp->Next = P->Next;
+	P->Next = temp;
+
+	Unos(temp);
+	return 0;
+
+}
+
+int DodajNaKraj(Pozicija P)		//unos elementa na kraj
+{
+	Pozicija temp;
+	temp = (Pozicija)malloc(sizeof(Pozicija));
+	if (NULL == temp) {
+		printf("Nema dovoljno prostora u memoriji\n");
+		return 0;
+	}
+
+	Unos(temp);
+
+	while (NULL != P->Next)
+		P = P->Next;
+
+	temp->Next = P->Next;
+	P->Next = temp;
+	return 0;
+
+}
+
+int IspisListe(Pozicija P)		//ispis liste
+{
+	if (NULL == P->Next)
+	{
+		printf("Lista je prazna\n");
+		return 0;
+	}
+
+
+	while (NULL != P->Next) {
+
+		printf("%s\t%s\t %d\t %d\n", P->Next->ime, P->Next->prezime, P->Next->godina, P->Next->element);
+		P = P->Next;
+	}
+	printf("\n");
+	return 0;
+}
+
+int SortirajListu(Pozicija P)	//funkcija koja sortira listu po prezimenima
 {
 	Pozicija prev, j, temp, end;
 	end = NULL;
-	if (P == NULL)
+	if (NULL == P)
 	{
-		printf("Greska\n");
+		printf("Poslana NULL adresa umjesto adrese od head\n");
 		return 0;
 	}
 
 	while (P->Next != end) {
-
 		prev = P;
 		j = P->Next;
-
 		while (j->Next != end)
 		{
-
 			if (strcmp(j->prezime, j->Next->prezime)>0)
 			{
 				temp = j->Next;
@@ -260,47 +160,76 @@ int SortirajListu(Pozicija P)//funkcija koja sortira po prezimenima
 	}
 	return 0;
 }
-int UpisUDatoteku(const char *a, Pozicija P)//upisuje iz liste u datoteku
-{
-	FILE *fp = NULL;
-	P = P->Next;
-	fp = fopen(a, "w");
-	while (P != NULL)
-	{
-		fprintf(fp, " %s %s\t %d\t %d\n", P->ime, P->prezime, P->godina, P->element);
-		P = P->Next;
-	}
 
-	fclose(fp);
-	return 0;
+int UbaciIzaElementa(Pozicija P)	//ubacivanje elementa iza nekog elementa
+{
+	int x = 0;
+	Pozicija q;
+	q = (Pozicija)malloc(sizeof(Pozicija));
+
+	printf("Iza kojeg elementa zelite ubaciti\n");
+	scanf("%d", &x);
+
+	P = TraziElement(x, P);
+	P = P->Next;
+
+	if (NULL == P) {
+		printf("Nije pronaden navedeni element\n");
+		return 0;
+	}
+	else {
+		Unos(q);
+		q->Next = P->Next;
+		P->Next = q;
+		return 0;
+	}
 }
 
-int IspisIzDatoteke(const char *a, Pozicija P)//ispisuje iz datoteke u listu
+int UbaciIspredElementa(Pozicija P)		//ubacivanje elementa ispred nekog elementa
 {
-	FILE *fp = NULL;
-	Pozicija temp = NULL;
+	int x = 0;
+	Pozicija q;
+	q = (Pozicija)malloc(sizeof(Pozicija));
 
-	Pozicija temp1=P;
-	BrisiSve(P);
+	printf("Ispred kojeg elementa zelite ubaciti\n");
+	scanf("%d", &x);
 
-	fp = fopen(a, "r");
+	P = TraziElement(x, P);
 
-	do
-	{	
-		temp = (Pozicija)malloc(sizeof(Pozicija));
-		temp1->Next = temp;
-		fscanf(fp, " %s %s %d %d", temp->ime, temp->prezime, &temp->godina, &temp->element);
-		while (temp1->Next != NULL)
-			temp1 = temp1->Next;
-		temp->Next = temp1->Next;
-	} while (!feof(fp));
+	if (NULL == P->Next) {
+		printf("Nije pronaden navedeni element\n");
+		return 0;
+	}
+	else {
+		Unos(q);
+		q->Next = P->Next;
+		P->Next = q;
 
-	fclose(fp);
-	IspisListe(P);
+		return 0;
+	}
+}
 
+int BrisiElement(Pozicija P)		//brisanje elementa
+{
+	int n;
+	Pozicija q;
 
-	return 0;
+	printf("Unesite element koji zelite brisati\n");
+	scanf("%d", &n);
 
+	q = TraziElement(n, P);
+
+	if (NULL == q->Next)
+	{
+		printf("Nije pronaden navedeni element\n");
+		return 0;
+	}
+	else {
+		P = q->Next;
+		q->Next = P->Next;
+		free(P);
+		return 0;
+	}
 }
 
 int BrisiSve(Pozicija P)
@@ -313,5 +242,87 @@ int BrisiSve(Pozicija P)
 		free(temp);
 	}
 	P->Next = NULL;
+
+	return 0;
+}
+
+int TraziPrezime(Pozicija P)		//trazenje prezimena
+{
+	char a[N];
+	int spremiste = 0;
+	P = P->Next;
+
+	printf("Unesite prezime koje trazite\n");
+	scanf(" %s", a);
+
+	while (NULL != P->Next)
+	{
+		if (strcmp(tolower(a), tolower(P->prezime)) == 0)
+			spremiste++;
+		P = P->Next;
+	}
+	if (spremiste > 0)
+		printf("Pronadeno je prezime %s i takvih %d\n",a,spremiste);
+	else
+		printf("Prezime nije pronadeno\n");
+
+	return 0;
+}
+
+
+Pozicija TraziElement(int x, Pozicija P)	//funkcija koja trazi prethodnika elementu
+{
+	while (NULL != P->Next && P->Next->element != x)
+	{
+		P = P->Next;
+	}
+	return P;
+}
+
+int UpisUDatoteku(const char *a, Pozicija P)	//upis liste u datoteku
+{
+	FILE *fp = NULL;
+	P = P->Next;
+	fp = fopen(a, "w");
+
+	if (NULL == fp) {
+		printf("Greska pri pokusaju otvaranja filea\n");
+		return 0;
+	}
+
+	while (NULL != P)
+	{
+		fprintf(fp, " %s %s\t %d\t %d\n", P->ime, P->prezime, P->godina, P->element);
+		P = P->Next;
+	}
+	fclose(fp);
+
+	return 0;
+}
+
+int IspisIzDatoteke(const char *a, Pozicija P)	//ispis iz prazne datoteke u listu
+{
+	FILE *fp = NULL;
+	Pozicija temp = NULL;
+	Pozicija temp1 = P;
+	BrisiSve(P);
+	fp = fopen(a, "r");
+
+	if (NULL == fp){
+		printf("Greska pri pokusaju otvaranja filea\n");
+	return 0;
+}
+	do
+	{	
+		temp = (Pozicija)malloc(sizeof(Pozicija));
+		temp1->Next = temp;
+		fscanf(fp, " %s %s %d %d", temp->ime, temp->prezime, &temp->godina, &temp->element);
+		while (NULL != temp1->Next)
+			temp1 = temp1->Next;
+		temp->Next = temp1->Next;
+	} while (!feof(fp));
+
+	fclose(fp);
+	IspisListe(P);
 	return 0;
 }

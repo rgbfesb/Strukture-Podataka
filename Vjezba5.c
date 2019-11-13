@@ -41,7 +41,7 @@ int main(void)
 	Presjek(&Lista1, &Lista2, &Lista4);
 	IspisListe(&Lista4);
 	
-	getchar();
+
 
 	return 0;
 }

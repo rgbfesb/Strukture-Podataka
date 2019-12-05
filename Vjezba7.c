@@ -22,10 +22,9 @@ int Obrada(Pok, char*);
 int main(void)
 {
 	struct Stog Slack;
-	char niz[N];
+	const char* dat = "datoteka.txt";
 	Slack.Next = NULL;
-	scanf("%s",niz);
-	Obrada(&Slack,niz);
+	Obrada(&Slack,dat);
 
 	printf("Rezultat je %d.\n", Pop(&Slack));
 	return 0;
@@ -88,16 +87,21 @@ int Racun(Pok P,char op)
 
 	return 0;
 }
-int Obrada(Pok P, char* niz)
+int Obrada(Pok P, char* dat)
 {
+	FILE *fp;
+	char niz[N];
 	int i = 0;
 	char a = '\0';
+	fp = fopen(dat, "r");
+	fscanf(fp," %s", niz);
+	fclose(fp);
 
 	for ( i = 0; niz[i] != '\0'; i++)
 	{
 		a = niz[i];
 		if (a >= '0' && a <= '9')
-			PushStog(P, (int)a);
+			PushStog(P, a-48);
 
 		else
 			PushStog(P, Racun(P, a));

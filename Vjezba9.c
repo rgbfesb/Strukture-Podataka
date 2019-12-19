@@ -13,10 +13,12 @@ struct Stablo
 	Pok Right;
 };
 Pok Unos(int, Pok);
-Pok TraziMin(Pok);
-int Ispis(Pok);
 Pok Brisanje(int, Pok);
+Pok TraziMin(Pok);
+Pok Alloc(int, Pok);
+int Ispis(Pok);
 int Trazi(int, Pok);
+
 
 
 int main(void)
@@ -63,12 +65,7 @@ int main(void)
 Pok Unos(int el, Pok P)
 {
 	if (NULL == P)
-	{
-		P = (Pok)malloc(sizeof(struct Stablo));
-		P->Left = NULL;
-		P->Right = NULL;
-		P->element = el;
-	}
+		P = Alloc(el,P);
 
 	else if (el > P->element)
 		P->Right = Unos(el, P->Right);
@@ -151,4 +148,13 @@ int Ispis(Pok P)
 		Ispis(P->Right);
 	
 	}
+}
+
+Pok Alloc(int el,Pok P)
+{
+	P = (Pok)malloc(sizeof(struct Stablo));
+	P->Left = NULL;
+	P->Right = NULL;
+	P->element = el;
+	return P;
 }

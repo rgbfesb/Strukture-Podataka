@@ -23,7 +23,7 @@ int UnosPodDir(Grana);
 int Ispis(Grana);
 int IspisDir(Grana);
 Grana PovratakUPret(Grana);
-Grana Ajde_U_Dir(Grana);
+Grana AjdeUDir(Grana);
 
 int main(void)
 {
@@ -37,24 +37,26 @@ int main(void)
 		printf("1:Unos Direktorija\n2:Unos Poddirektorija\n3:Ispis Direktorija\n4:Povratak U Prethodni Direktorij\n5:Ulaz u direkorij\n\n0:Exit\n\n");
 		Ispis(Pok);
 
-		scanf("%d", &meni);
-		switch (meni)
-		{
-		case 1:
-			UnosDir(Pok);
-			break;
-		case 2:
-			UnosPodDir(Pok);
-			break;
-		case 3:
-			IspisDir(Pok);
-			break;
-		case 4:
-			Pok=PovratakUPret(Pok);
-			break;
-		case 5:
-			Pok = Ajde_U_Dir(Pok);
-			break;
+		scanf(" %d", &meni);
+		if (!(meni == 1 && strcmp(Pok->ime,"C:")==0)) {
+			switch (meni)
+			{
+			case 1:
+				UnosDir(Pok);
+				break;
+			case 2:
+				UnosPodDir(Pok);
+				break;
+			case 3:
+				IspisDir(Pok);
+				break;
+			case 4:
+				Pok = PovratakUPret(Pok);
+				break;
+			case 5:
+				Pok = AjdeUDir(Pok);
+				break;
+			}
 		}
 		printf("\n\n");
 	
@@ -66,7 +68,7 @@ int UnosDir(Grana P)
 {
 	Grana temp;
 	temp = (Grana)malloc(sizeof(struct Stablo));
-	while ( NULL!=P->Next)
+	while (NULL != P->Next)
 		P = P->Next;
 
 	printf("Unesite ime direktorija\n");
@@ -88,7 +90,7 @@ int UnosPodDir(Grana P)
 	printf("Kojem direktoriju zelite unijeti poddirektorij? \n");
 	scanf(" %s", &ime);
 
-	while (P != NULL&&prov == 0)
+	while (NULL != P && prov == 0)
 	{
 		if (strcmp(tolower(ime), tolower(P->ime)) != 0)
 			P = P->Next;
@@ -96,7 +98,7 @@ int UnosPodDir(Grana P)
 			prov = 1;
 	}
 
-	if (NULL == P&&prov==0) {
+	if (NULL == P && prov==0) {
 		printf("Nema tog direktorija\n");
 		return 0;
 	}
@@ -123,7 +125,7 @@ int Ispis(Grana P)
 	}
 
 	while (NULL != P){
-		printf("%s\n", P->ime);
+		printf(" %s\n", P->ime);
 	P= P->Next;
 }
 	return 0;
@@ -134,7 +136,8 @@ int IspisDir(Grana P)
 	char ime[N];
 	printf("Koji direktorij zelite ispisati? \n");
 	scanf(" %s", &ime);
-	while (P != NULL)
+	printf("\n");
+	while (NULL != P)
 	{
 		if (strcmp(tolower(ime), tolower(P->ime))==0)
 		{
@@ -155,21 +158,21 @@ Grana PovratakUPret(Grana P)
 	return P;
 }
 
-Grana Ajde_U_Dir(Grana P)
+Grana AjdeUDir(Grana P)
 {
 	char ime[N];
 	int prov = 0;
 	printf("U koji direktorij zelite uci? \n");
 	scanf(" %s", &ime);
 
-	while (P != NULL&&prov == 0)
+	while (NULL != P  && prov == 0)
 	{
 		if (strcmp(tolower(ime), tolower(P->ime)) != 0)
 			P = P->Next;
 		else
 			prov = 1;
 	}
-	if (NULL == P&&prov == 0) {
+	if (NULL == P && prov == 0) {
 		printf("Nema tog direktorija\n");
 		return 0;
 	}

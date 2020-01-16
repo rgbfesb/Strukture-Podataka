@@ -26,7 +26,8 @@ int main(void)
 {
 	struct Struct HashList[N];
 	Pok temp=NULL;
-	char* ime=NULL, *prezime = NULL;
+	char ime[N] = {0};
+	char prezime[N] = {0};
 	int i = 0;
 	for (i = 0; i < N; i++)
 		Init(&HashList[i]);
@@ -63,7 +64,6 @@ int DodajHash(Pok P,Pok temp)
 {
 	int key = 0;
 
-
 	key = Preslikavanje(temp->prezime);
 	P = &P[key];
 	temp->Next = P->Next;
@@ -75,11 +75,13 @@ int DodajHash(Pok P,Pok temp)
 int Ispis(Pok P)
 {
 	int i = 0;
-	for(i=0; i<N; i++)
+	Pok temp = P;
+	puts("\n");
+	for(i=1; i<=N; i++)
 	{
 		if(P)
 		IspisListe(P);
-		P = &P[i];
+		P= &temp[i];
 	}
 	return 0;
 }
@@ -89,7 +91,7 @@ int IspisListe(Pok P)
 	P = P->Next;
 	while (NULL != P)
 	{
-		printf("%s %s %d", P->ime, P->prezime, P->matbroj);
+		printf("%s %s %d\n", P->ime, P->prezime, P->matbroj);
 		P = P->Next;
 	}
 	return 0;
